@@ -26,6 +26,7 @@ date = today.strftime("%m.%d.%Y")
 raw_data_bucket = 'supermetrics-all-client-data'
 std_data_bucket = 'all-client-delivery-data'
 
+
 #----------------------------------------Upload to S3---------------------------------------------------------------
 
 def upload_to_s3(df,file_name,file_path):
@@ -715,10 +716,6 @@ comb_aggr_df['Site'] = comb_aggr_df['Site'].apply(lambda x: x.upper())
 comb_aggr_df['Site'] = comb_aggr_df['Site'].apply(lambda x: x.strip())
 
 
-comb_aggr_df = comb_aggr_df.groupby(['Campaign Name', 'Site'], as_index=False).sum()
-print(comb_aggr_df.dtypes)
-print(comb_aggr_df.columns)
-
 comb_aggr_df = pd.merge(
     comb_aggr_df,
     reach_aggr_df,
@@ -728,9 +725,13 @@ comb_aggr_df = pd.merge(
 
 comb_aggr_df['Reach'] = comb_aggr_df['Reach'].fillna(0)
 
-maya_performance_df = maya_performance_df.loc[:,['Advertiser ID', 'Campaign ID', 'Campaign Name', 'Placement/Adset ID', 'Placement/Adset Name',
- 'Site', 'Creative ID', 'Creative Name', 'Media Cost', 'Impressions', 'Clicks', 'Video Plays','Video views 1st Quartile', 'Video views Midpoint',
- 'Video views 3rd Quartile','Video Completions', 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'Conversion Rate', 'CPA', 'Leads']]
+comb_aggr_df = comb_aggr_df.loc[:,['Campaign Name','Site','Media Cost','Impressions','Clicks','Reach','Leads',
+'Video Plays','Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile', 'Video Completions', 'Video Completions',
+'Conversion Rate']]
+
+comb_aggr_df = comb_aggr_df.groupby(['Campaign Name', 'Site'], as_index=False).sum()
+print(comb_aggr_df.dtypes)
+print(comb_aggr_df.columns)
 
 
 
