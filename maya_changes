@@ -726,6 +726,7 @@ mapping_df1_pl[cols_to_fix] = (
 
 #renaming sheet column name for joining purpose
 mapping_df1_pl['Platform'] = mapping_df1_pl['Platform'].replace('Meta', 'Facebook')
+mapping_df1_pl['Platform'] = mapping_df1_pl['Platform'].replace('TikTok', 'TIKTOK')
 
 updated_planned_df = mapping_df1_pl.drop_duplicates(subset=['Platform', 'Campaign', 'Campaign Name Dash', 'Start Month', 'End Month', 'Objective', 'Audience'])
 print(updated_planned_df.columns)
