@@ -789,7 +789,7 @@ pln_del_df["ForEx"] = pln_del_df["ForEx"].fillna(1).astype(int)
 #cleaning columns
 
 pln_del_df = pln_del_df.loc[:,['Campaign Name','Site','Campaign Name Dash', 'CE Number', 'ForEx', 'Start Month', 'End Month', 'Year',
-'Objective','Audience', 'Media Cost','Impressions','Clicks','Reach','Leads',
+'Objective','Audience', 'Media Cost','Impressions','Clicks','Leads',
 'Video Plays','Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile', 'Video Completions',
 'Conversion Rate','CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'CPA',
 'Installs', 'Registration Success - Unique Users', 'Wallet_debit_active - Unique Users', 'Wallet_Credit_Active - Unique Users', 
@@ -813,7 +813,7 @@ print(pln_del_df.dtypes)
 
 pln_del_df = pln_del_df.drop_duplicates()
 
-pln_del_df[['Media Cost','Impressions','Clicks','Reach','Leads','Video Plays','Video views 1st Quartile', 'Video views Midpoint', 
+pln_del_df[['Media Cost','Impressions','Clicks','Leads','Video Plays','Video views 1st Quartile', 'Video views Midpoint', 
 'Video views 3rd Quartile', 'Video Completions','Conversion Rate',
 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'CPA',
 'Installs', 'Registration Success - Unique Users', 'Wallet_debit_active - Unique Users', 'Wallet_Credit_Active - Unique Users', 
