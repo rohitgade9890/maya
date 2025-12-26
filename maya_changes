@@ -829,7 +829,7 @@ pln_del_df[['Media Cost','Impressions','Clicks','Leads','Video Plays','Video vie
 'Planned CPD PHP (BLA Savings)', 'Planned CPD USD (BLA Savings)', 'Planned CPCO PHP', 'Planned CPCO USD', 'Planned CPDP PHP', 
 'Planned CPDP USD', 'Planned CPAPP PHP', 'Planned CPAPP USD', 'Planned CPACT PHP', 'Planned CPACT USD', 'Planned CPDD PHP', 
 'Planned CPDD USD', 'Planned CPM', 'Planned CPM USD', 'Planned CPLPV', 'Planned CPLPV Usd', 'Planned CPC', 'Planned CPC USD', 
-'Planned CPI PHP', 'Planned CPI USD', 'Planned CPR PHP', 'Planned CPR USD', 'Reach (Weekly Update)']] = pln_del_df[['Media Cost','Impressions','Clicks','Reach','Leads','Video Plays','Video views 1st Quartile', 'Video views Midpoint', 
+'Planned CPI PHP', 'Planned CPI USD', 'Planned CPR PHP', 'Planned CPR USD', 'Reach (Weekly Update)']] = pln_del_df[['Media Cost','Impressions','Clicks','Leads','Video Plays','Video views 1st Quartile', 'Video views Midpoint', 
 'Video views 3rd Quartile', 'Video Completions','Conversion Rate',
 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'CPA',
 'Installs', 'Registration Success - Unique Users', 'Wallet_debit_active - Unique Users', 'Wallet_Credit_Active - Unique Users', 
