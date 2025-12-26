@@ -214,8 +214,6 @@ def typecast(df):
     if 'Media Cost' in df.columns:
         df['Media Cost'] = df['Media Cost'].fillna(0)
         df['Media Cost'] = df['Media Cost'].astype(float)
-		
-	
       
     df['Leads'] = df['Leads'].astype(pd.Int64Dtype())
     
@@ -363,13 +361,6 @@ print(DV360_Acc_list)
 
 combined_df = pd.DataFrame()
 
-#adding reach column explecitlly
-fb_reach_df = pd.DataFrame(columns=['Campaign Name', 'Site', 'Reach'])
-gad_reach_df = pd.DataFrame(columns=['Campaign Name', 'Site', 'Reach'])
-tt_reach_df = pd.DataFrame(columns=['Campaign Name', 'Site', 'Reach'])
-dv360_reach_df = pd.DataFrame(columns=['Campaign Name', 'Site', 'Reach'])
-
-
 for i in key_list:
     year=i.split('_')[-1]
     source=i.split('_')[0]
@@ -410,10 +401,6 @@ for i in key_list:
                     cols = raw_df.columns
                     renamed_df = rename(raw_df,cols,source)
                     raw_fb_df=pd.concat([raw_fb_df,renamed_df],axis=0, ignore_index=True)
-                    if 'reach' in raw_fb_df.columns:
-                      raw_fb_df['Reach'] = pd.to_numeric(raw_fb_df['reach'], errors='coerce').fillna(0)
-                    else:
-                        raw_fb_df['Reach'] = 0
                     print(raw_fb_df.columns)
                     print(raw_fb_df.shape)
                     raw_fb_df = raw_fb_df.drop(columns=['Leads'], errors='ignore')
@@ -424,14 +411,6 @@ for i in key_list:
                     typecasted_fb_df = typecast(raw_fb_df)
                     mapping_fb = taxonomy(typecasted_fb_df)
                     print("after fb map",mapping_fb.columns)
-					# -------- CAPTURE REACH (FB) --------
-                    if 'Reach' in mapping_fb.columns:
-                      tmp = mapping_fb[['Campaign Name', 'Site', 'Reach']].copy()
-                      tmp['Campaign Name'] = tmp['Campaign Name'].astype(str).str.upper().str.strip()
-                      tmp['Site'] = tmp['Site'].astype(str).str.upper().str.strip()
-                      tmp['Reach'] = pd.to_numeric(tmp['Reach'], errors='coerce').fillna(0)
-                      fb_reach_df = pd.concat([fb_reach_df, tmp], ignore_index=True)
-                    # ----------Reach captured for fb -------------
                     # mapping_fb['Leads'] = mapping_fb['Offsite lead'] + mapping_fb['Onsite lead']
                     # raw_fb_df = raw_fb_df[(raw_fb_df['Date'] >= '2023-01-01')]# & (raw_fb_df['Date'] <= end_date)]
                     fb_df = mapping_fb.loc[:,['Advertiser ID', 'Date', 'Campaign ID', 'Campaign Name', 'Placement/Adset ID', 'Placement/Adset Name', 'Site', 'Creative ID', 'Creative Name', 'Media Cost', 'Impressions', 'Clicks', 'Video Plays','Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile','Video Completions', 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'CPA', 'Leads']]
@@ -460,14 +439,6 @@ for i in key_list:
                     typecasted_gad_df = typecast(raw_gad_df)
                     mapping_gad = taxonomy(typecasted_gad_df)
                     print("after gad map",mapping_gad.columns)
-					# -------- CAPTURE REACH (GAD - usually empty) --------
-                    if 'Reach' in mapping_gad.columns:
-                      tmp = mapping_gad[['Campaign Name', 'Site', 'Reach']].copy()
-                      tmp['Campaign Name'] = tmp['Campaign Name'].astype(str).str.upper().str.strip()
-                      tmp['Site'] = tmp['Site'].astype(str).str.upper().str.strip()
-                      tmp['Reach'] = pd.to_numeric(tmp['Reach'], errors='coerce').fillna(0)
-                      gad_reach_df = pd.concat([gad_reach_df, tmp], ignore_index=True)
-					# ------- reach captured done --------------
                     # raw_gad_df = raw_gad_df[raw_gad_df['Date'] >= '2023-01-01']
                     gad_df = mapping_gad.loc[:,['Advertiser ID', 'Date', 'Campaign ID', 'Campaign Name', 'Placement/Adset ID', 'Placement/Adset Name', 'Site', 'Creative ID', 'Creative Name', 'Channel Type', 'Channel Sub-Type', 'Media Cost', 'Impressions', 'Clicks', 'Video Plays','Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile','Video Completions', 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'Conversion Rate', 'CPA', 'Leads']]
                     # merge_gad_df.reset_index(drop=True)
@@ -483,10 +454,6 @@ for i in key_list:
                     cols = raw_df.columns
                     renamed_df = rename(raw_df,cols,source)
                     raw_tt_df=pd.concat([raw_tt_df,renamed_df],axis=0, ignore_index=True)
-                    if 'reach' in raw_tt_df.columns:
-                      raw_tt_df['Reach'] = pd.to_numeric(raw_tt_df['reach'], errors='coerce').fillna(0)
-                    else:
-                      raw_tt_df['Reach'] = 0
                     print(raw_tt_df.columns)
                     print(raw_tt_df.shape)
                     raw_tt_df = raw_tt_df.drop(columns=['Leads'], errors='ignore')
@@ -496,14 +463,6 @@ for i in key_list:
                     mapping_tt = taxonomy(typecasted_tt_df)
                     # raw_mm_df = raw_mm_df[raw_mm_df['Date'] >= '2023-01-01']
                     print("after tt map",mapping_tt.columns)
-					# -------- CAPTURE REACH (TT) --------
-                    if 'Reach' in mapping_tt.columns:
-                      tmp = mapping_tt[['Campaign Name', 'Site', 'Reach']].copy()
-                      tmp['Campaign Name'] = tmp['Campaign Name'].astype(str).str.upper().str.strip()
-                      tmp['Site'] = tmp['Site'].astype(str).str.upper().str.strip()
-                      tmp['Reach'] = pd.to_numeric(tmp['Reach'], errors='coerce').fillna(0)
-                      tt_reach_df = pd.concat([tt_reach_df, tmp], ignore_index=True)
-					# --------- reach captured for tt ----------
                     tt_df = mapping_tt.loc[:,['Advertiser ID', 'Date', 'Campaign ID', 'Campaign Name', 'Placement/Adset ID', 'Placement/Adset Name', 'Site', 'Creative ID', 'Creative Name', 'Media Cost', 'Impressions', 'Clicks', 'Video Plays', 'Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile', 'Video Completions', 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'CPA', 'Leads']]
                     print("TT cost", tt_df['Media Cost'].unique())
                     merge_tt_df.reset_index(drop=True)
@@ -525,14 +484,6 @@ for i in key_list:
                     mapping_dv360 = taxonomy(typecasted_dv360_df)
                     # raw_mm_df = raw_mm_df[raw_mm_df['Date'] >= '2023-01-01']
                     print("after dv360 map",mapping_dv360.columns)
-					# -------- CAPTURE REACH (DV360) --------
-                    if 'Reach' in mapping_dv360.columns:
-                      tmp = mapping_dv360[['Campaign Name', 'Site', 'Reach']].copy()
-                      tmp['Campaign Name'] = tmp['Campaign Name'].astype(str).str.upper().str.strip()
-                      tmp['Site'] = tmp['Site'].astype(str).str.upper().str.strip()
-                      tmp['Reach'] = pd.to_numeric(tmp['Reach'], errors='coerce').fillna(0)
-                      dv360_reach_df = pd.concat([dv360_reach_df, tmp], ignore_index=True)
-					# --------- reach captured for dv360 -------
                     dv360_df = mapping_dv360.loc[:,['Advertiser ID', 'Date', 'Campaign ID', 'Campaign Name', 'Placement/Adset ID', 'Placement/Adset Name', 'Site', 'Creative ID', 'Creative Name', 'Media Cost', 'Impressions', 'Clicks', 'Video Plays', 'Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile', 'Video Completions', 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'CPA', 'Leads']]
                     merge_dv360_df.reset_index(drop=True)
                     dv360_df.reset_index(drop=True)
@@ -541,14 +492,6 @@ for i in key_list:
         
         else:
             print(f"No objects found with prefix '{prefix}' in bucket '{bucket_name}'")
-
-# ---------------- Aggregate Reach across all sources ----------------
-reach_aggr_df = (
-    pd.concat([fb_reach_df, gad_reach_df, tt_reach_df, dv360_reach_df], ignore_index=True)
-      .groupby(['Campaign Name', 'Site'], as_index=False)
-      .agg({'Reach': 'max'})
-)
-
 
 combined_df = pd.concat([merge_fb_df, merge_gad_df, merge_tt_df, merge_dv360_df], axis=0, ignore_index=True)
 print("Combined ",combined_df.columns)
@@ -600,8 +543,6 @@ combined_df = combined_df.replace('NaN','',regex = True)
 combined_df[['Media Cost', 'Impressions', 'Clicks', 'Video Plays', 'Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile', 'Video Completions', 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'Conversion Rate', 'CPA']] = combined_df[['Media Cost', 'Impressions', 'Clicks', 'Video Plays', 'Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile', 'Video Completions', 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'Conversion Rate', 'CPA']].fillna(0)
 combined_df['Date'] = pd.to_datetime(combined_df['Date'])
 combined_df['Date'] = combined_df['Date'].dt.strftime('%m/%d/%Y')
-
-
 
 #---------------------------------Appsflyer Data Addition-----------------------------------------------------
 obj2 = s3.get_object(Bucket=std_data_bucket, Key="MAYA/Appsflyer_Manual_Data/Appsflyer_Combined_Raw_Data_2025.xlsx")
@@ -714,59 +655,27 @@ else:
 #--------------------------------upload done------------------------------------------------------ 
 
 # #------------------------------------merge planned data-----------------------------------
+performance_df = mapped_delivery_df.copy()
+performance_df['Campaign Name'] = performance_df['Campaign Name'].astype(str)
+performance_df['Campaign Name'] = performance_df['Campaign Name'].apply(lambda x: x.upper())
+performance_df['Campaign Name'] = performance_df['Campaign Name'].apply(lambda x: x.strip())
+performance_df['Site'] = performance_df['Site'].astype(str)
+performance_df['Site'] = performance_df['Site'].apply(lambda x: x.upper())
+performance_df['Site'] = performance_df['Site'].apply(lambda x: x.strip())
 
-comb_aggr_df = maya_performance_df.copy()
-comb_aggr_df['Campaign Name'] = comb_aggr_df['Campaign Name'].astype(str)
-comb_aggr_df['Campaign Name'] = comb_aggr_df['Campaign Name'].apply(lambda x: x.upper())
-comb_aggr_df['Campaign Name'] = comb_aggr_df['Campaign Name'].apply(lambda x: x.strip())
-comb_aggr_df['Site'] = comb_aggr_df['Site'].astype(str)
-comb_aggr_df['Site'] = comb_aggr_df['Site'].apply(lambda x: x.upper())
-comb_aggr_df['Site'] = comb_aggr_df['Site'].apply(lambda x: x.strip())
+performance_df = performance_df.loc[:, ['Advertiser ID', 'Campaign ID', 'Campaign Name', 'Placement/Adset ID', 'Placement/Adset Name', 'Site', 'Creative ID', 'Creative Name', 'Country', 'Media Cost', 'Impressions', 'Clicks', 'Video Plays', 'Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile', 'Video Completions', 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'Conversion Rate', 'CPA', 'Leads', 'Installs', 'Registration Success - Unique Users', 'Wallet_debit_active - Unique Users', 'Wallet_Credit_Active - Unique Users', 'Dashboard_Tap_Savings - Event Counter', 'Savings_Opening_OTP_Success - Event Counter', 'Savings_Dashboard_Tap_Upgrade_now - Event Counter', 'Saving_Dashboard_Tap_Create_Savings - Event Counter', 'Savings_Success_Deposit_Success - Event Counter', 'Credit_Activation_Success - Unique Users', 'Credit_Transfer_Processing_Tap_Continue - Event Counter', 'Credit_Dashboard_Apply - Unique Users', 'ekyc_Submit_Success - Unique Users']]
 
+performance_df[['Media Cost', 'Impressions', 'Clicks', 'Video Plays', 'Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile', 'Video Completions', 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'Conversion Rate', 'CPA', 'Leads', 'Installs', 'Registration Success - Unique Users', 'Wallet_debit_active - Unique Users', 'Wallet_Credit_Active - Unique Users', 'Dashboard_Tap_Savings - Event Counter', 'Savings_Opening_OTP_Success - Event Counter', 'Savings_Dashboard_Tap_Upgrade_now - Event Counter', 'Saving_Dashboard_Tap_Create_Savings - Event Counter', 'Savings_Success_Deposit_Success - Event Counter', 'Credit_Activation_Success - Unique Users', 'Credit_Transfer_Processing_Tap_Continue - Event Counter', 'Credit_Dashboard_Apply - Unique Users', 'ekyc_Submit_Success - Unique Users']] = performance_df[['Media Cost', 'Impressions', 'Clicks', 'Video Plays', 'Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile', 'Video Completions', 'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'Conversion Rate', 'CPA', 'Leads', 'Installs', 'Registration Success - Unique Users', 'Wallet_debit_active - Unique Users', 'Wallet_Credit_Active - Unique Users', 'Dashboard_Tap_Savings - Event Counter', 'Savings_Opening_OTP_Success - Event Counter', 'Savings_Dashboard_Tap_Upgrade_now - Event Counter', 'Saving_Dashboard_Tap_Create_Savings - Event Counter', 'Savings_Success_Deposit_Success - Event Counter', 'Credit_Activation_Success - Unique Users', 'Credit_Transfer_Processing_Tap_Continue - Event Counter', 'Credit_Dashboard_Apply - Unique Users', 'ekyc_Submit_Success - Unique Users']].fillna(0)
 
-comb_aggr_df = pd.merge(
-    comb_aggr_df,
-    reach_aggr_df,
-    how='left',
-    on=['Campaign Name', 'Site']
-)
-
-comb_aggr_df['Reach'] = comb_aggr_df['Reach'].fillna(0)
-comb_aggr_df['Reach'] = comb_aggr_df['Reach'].astype(float)
-
-comb_aggr_df = comb_aggr_df.loc[:,['Campaign Name','Site','Media Cost','Impressions','Clicks','Reach','Leads',
-'Video Plays','Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile', 'Video Completions','Conversion Rate']]
-
-comb_aggr_df = (
-    comb_aggr_df
-    .groupby(['Campaign Name', 'Site'], as_index=False)
-    .agg({
-        'Media Cost': 'sum',
-        'Impressions': 'sum',
-        'Clicks': 'sum',
-        'Reach': 'sum',
-        'Leads': 'sum',
-        'Video Plays': 'sum',
-        'Video views 1st Quartile': 'sum',
-        'Video views Midpoint': 'sum',
-        'Video views 3rd Quartile': 'sum',
-        'Video Completions': 'sum',
-
-        # ✅ keep column, do NOT sum
-        'Conversion Rate': 'first'
-    })
-)
+comb_aggr_df = performance_df.groupby(['Campaign Name', 'Site'], as_index=False).sum()
 print(comb_aggr_df.dtypes)
 print(comb_aggr_df.columns)
-
-
 
 merged_file_path1 = "ajay.shirote/from_sharepoint/Maya_Planned_Data_Insights/Maya_Planned_and_Insight_Input_Sheet.xlsx"
 
 obj1_pl = s3.get_object(Bucket='ms-sharepoint-sftp', Key=merged_file_path1)
 mapping_df1_pl = pd.read_excel(BytesIO(obj1_pl['Body'].read()),sheet_name='Planned Number')
 
-#mapping_df1_pl = mapping_df1_pl.drop(['Audience', 'Planned Spend', 'Planned CPM','Planned CPLPV','Planned CPC','Planned CPL (Cost per lead) PHP','Planned CPFV','Reach (Weekly Update)'], axis=1)
 mapping_df1_pl = mapping_df1_pl.drop(['Audience'], axis=1)
 mapping_df1_pl = mapping_df1_pl.rename(columns={'Audience_Merged': 'Audience','Dashboard Campaign Name':'Campaign Name Dash'})
 
@@ -785,20 +694,6 @@ mapping_df1_pl = mapping_df1_pl.loc[:, ~mapping_df1_pl.columns.str.startswith('U
 mapping_df1_pl = mapping_df1_pl.drop(columns=['Notes'], errors='ignore')
 
 print(mapping_df1_pl.columns.tolist())
-
-#mapping_df1_pl = mapping_df1_pl.rename(columns={
-#	'Audience_Merged': 'Audience',
-#	'Planned Spend USD': 'Planned Spend',
-#	'Planned CPM USD': 'Planned CPM',
-#	'Planned CPLPV Usd': 'Planned CPLPV',
-#	'Planned CPC USD': 'Planned CPC',
-#	'Planned CPL USD': 'Planned CPL',
-#	'Planned CPFV USD': 'Planned CPFV',
-#	'Dashboard Campaign Name':'Campaign Name Dash'
-#})
-#
-
-
 
 cols_to_fix = [
     'Planned Spend', 'Planned Spend USD', 'Planned Impressions',
@@ -829,10 +724,8 @@ mapping_df1_pl[cols_to_fix] = (
         .fillna(0)                               # NaN → 0
 )
 
-
 #renaming sheet column name for joining purpose
 mapping_df1_pl['Platform'] = mapping_df1_pl['Platform'].replace('Meta', 'Facebook')
-
 
 updated_planned_df = mapping_df1_pl.drop_duplicates(subset=['Platform', 'Campaign', 'Campaign Name Dash', 'Start Month', 'End Month', 'Objective', 'Audience'])
 print(updated_planned_df.columns)
@@ -859,7 +752,6 @@ updated_planned_df['Objective'] = updated_planned_df['Objective'].apply(lambda x
 updated_planned_df['Audience'] = updated_planned_df['Audience'].astype(str)
 updated_planned_df['Audience'] = updated_planned_df['Audience'].apply(lambda x: x.upper())
 updated_planned_df['Audience'] = updated_planned_df['Audience'].apply(lambda x: x.strip())
-
 
 cols_to_fill = [
     'Planned Spend', 'Planned Spend USD', 'Planned Impressions',
@@ -894,13 +786,19 @@ print(pln_del_df.columns)
 pln_del_df["Year"] = pln_del_df["Year"].fillna(1).astype(int)
 pln_del_df["ForEx"] = pln_del_df["ForEx"].fillna(1).astype(int)
 
-# -----------------------------------------
 #cleaning columns
 
 pln_del_df = pln_del_df.loc[:,['Campaign Name','Site','Campaign Name Dash', 'CE Number', 'ForEx', 'Start Month', 'End Month', 'Year',
 'Objective','Audience', 'Media Cost','Impressions','Clicks','Reach','Leads',
 'Video Plays','Video views 1st Quartile', 'Video views Midpoint', 'Video views 3rd Quartile', 'Video Completions',
-'Conversion Rate', 'Planned Spend', 'Planned Spend USD', 'Planned Impressions', 'Planned Clicks', 'Planned Reach', 
+'Conversion Rate','CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'CPA',
+'Installs', 'Registration Success - Unique Users', 'Wallet_debit_active - Unique Users', 'Wallet_Credit_Active - Unique Users', 
+'Dashboard_Tap_Savings - Event Counter', 'Savings_Opening_OTP_Success - Event Counter', 
+'Savings_Dashboard_Tap_Upgrade_now - Event Counter', 'Saving_Dashboard_Tap_Create_Savings - Event Counter', 
+'Savings_Success_Deposit_Success - Event Counter', 'Credit_Activation_Success - Unique Users', 
+'Credit_Transfer_Processing_Tap_Continue - Event Counter', 'Credit_Dashboard_Apply - Unique Users', 
+'ekyc_Submit_Success - Unique Users',
+'Planned Spend', 'Planned Spend USD', 'Planned Impressions', 'Planned Clicks', 'Planned Reach', 
 'Planned Installs', 'Planned Registrations', 'Planned Wallet Debit Active', 'Planned Complete Application (BLA CC)', 
 'Planned Depositor', 'Planned Cards Overview', 'Planned Data Privacy', 'Planned Credit Applications', 'Planned Credit Activation', 
 'Planned Drawdowns', 'Planned CPWDA PHP', 'Planned CPWDA USD', 'PLanned CPCA PHP (BLA CC)', 'PLanned CPCA USD (BLA CC)', 
@@ -916,18 +814,31 @@ print(pln_del_df.dtypes)
 pln_del_df = pln_del_df.drop_duplicates()
 
 pln_del_df[['Media Cost','Impressions','Clicks','Reach','Leads','Video Plays','Video views 1st Quartile', 'Video views Midpoint', 
-'Video views 3rd Quartile', 'Video Completions',
-'Conversion Rate', 'Planned Spend', 'Planned Spend USD', 'Planned Impressions', 'Planned Clicks', 'Planned Reach', 
+'Video views 3rd Quartile', 'Video Completions','Conversion Rate',
+'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'CPA',
+'Installs', 'Registration Success - Unique Users', 'Wallet_debit_active - Unique Users', 'Wallet_Credit_Active - Unique Users', 
+'Dashboard_Tap_Savings - Event Counter', 'Savings_Opening_OTP_Success - Event Counter', 
+'Savings_Dashboard_Tap_Upgrade_now - Event Counter', 'Saving_Dashboard_Tap_Create_Savings - Event Counter', 
+'Savings_Success_Deposit_Success - Event Counter', 'Credit_Activation_Success - Unique Users', 
+'Credit_Transfer_Processing_Tap_Continue - Event Counter', 'Credit_Dashboard_Apply - Unique Users', 
+'ekyc_Submit_Success - Unique Users',
+'Planned Spend', 'Planned Spend USD', 'Planned Impressions', 'Planned Clicks', 'Planned Reach', 
 'Planned Installs', 'Planned Registrations', 'Planned Wallet Debit Active', 'Planned Complete Application (BLA CC)', 
 'Planned Depositor', 'Planned Cards Overview', 'Planned Data Privacy', 'Planned Credit Applications', 'Planned Credit Activation', 
 'Planned Drawdowns', 'Planned CPWDA PHP', 'Planned CPWDA USD', 'PLanned CPCA PHP (BLA CC)', 'PLanned CPCA USD (BLA CC)', 
 'Planned CPD PHP (BLA Savings)', 'Planned CPD USD (BLA Savings)', 'Planned CPCO PHP', 'Planned CPCO USD', 'Planned CPDP PHP', 
 'Planned CPDP USD', 'Planned CPAPP PHP', 'Planned CPAPP USD', 'Planned CPACT PHP', 'Planned CPACT USD', 'Planned CPDD PHP', 
 'Planned CPDD USD', 'Planned CPM', 'Planned CPM USD', 'Planned CPLPV', 'Planned CPLPV Usd', 'Planned CPC', 'Planned CPC USD', 
-'Planned CPI PHP', 'Planned CPI USD', 'Planned CPR PHP', 'Planned CPR USD', 'Reach (Weekly Update)']] = pln_del_df[['Media Cost',
-'Impressions','Clicks','Reach','Leads','Video Plays','Video views 1st Quartile', 'Video views Midpoint', 
-'Video views 3rd Quartile', 'Video Completions',
-'Conversion Rate', 'Planned Spend', 'Planned Spend USD', 'Planned Impressions', 'Planned Clicks', 'Planned Reach', 
+'Planned CPI PHP', 'Planned CPI USD', 'Planned CPR PHP', 'Planned CPR USD', 'Reach (Weekly Update)']] = pln_del_df[['Media Cost','Impressions','Clicks','Reach','Leads','Video Plays','Video views 1st Quartile', 'Video views Midpoint', 
+'Video views 3rd Quartile', 'Video Completions','Conversion Rate',
+'CPM', 'VTR', 'Completion Rate', 'CPV', 'CTR', 'CPC', 'CPA',
+'Installs', 'Registration Success - Unique Users', 'Wallet_debit_active - Unique Users', 'Wallet_Credit_Active - Unique Users', 
+'Dashboard_Tap_Savings - Event Counter', 'Savings_Opening_OTP_Success - Event Counter', 
+'Savings_Dashboard_Tap_Upgrade_now - Event Counter', 'Saving_Dashboard_Tap_Create_Savings - Event Counter', 
+'Savings_Success_Deposit_Success - Event Counter', 'Credit_Activation_Success - Unique Users', 
+'Credit_Transfer_Processing_Tap_Continue - Event Counter', 'Credit_Dashboard_Apply - Unique Users', 
+'ekyc_Submit_Success - Unique Users',
+'Planned Spend', 'Planned Spend USD', 'Planned Impressions', 'Planned Clicks', 'Planned Reach', 
 'Planned Installs', 'Planned Registrations', 'Planned Wallet Debit Active', 'Planned Complete Application (BLA CC)', 
 'Planned Depositor', 'Planned Cards Overview', 'Planned Data Privacy', 'Planned Credit Applications', 'Planned Credit Activation', 
 'Planned Drawdowns', 'Planned CPWDA PHP', 'Planned CPWDA USD', 'PLanned CPCA PHP (BLA CC)', 'PLanned CPCA USD (BLA CC)', 
@@ -958,9 +869,6 @@ else:
     # combined_del_df = pd.concat([df_hist, delivery_df],axis=0)
     # delete_from_s3(delivery_file_path)
     upload_to_s3(pln_del_df,Planact_file_name,Planact_file_path)
-
-
-# -----------------------------------------
 
 # merged_file_path = 'XCM_India/References/XCM_Campaign_List.xlsx'
 # obj = s3.get_object(Bucket=std_data_bucket, Key=merged_file_path)
